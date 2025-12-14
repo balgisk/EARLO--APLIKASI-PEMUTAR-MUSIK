@@ -1,4 +1,3 @@
-README.md
 # 🎵 EARLO Music Player Console Application
 
 Aplikasi **Music Player berbasis konsol** yang dikembangkan sebagai Tugas Besar Mata Kuliah **Struktur Data**. Aplikasi ini menerapkan **Doubly Linked List (DLL)** dan **Binary Search Tree (BST)** untuk mengelola data lagu, playlist, serta mempercepat proses pencarian.
