@@ -228,6 +228,22 @@ def find_similar_song(current, library):
 
     return best_match
 
+def find_library_node(song, library):
+    curr = library.head
+    while curr:
+        if curr is song:
+            return curr
+        curr = curr.next
+    return None
+
+def find_playlist_node(title, playlist):
+    curr = playlist.head
+    while curr:
+        if curr.title.lower() == title.lower():
+            return curr
+        curr = curr.next
+    return None
+    
 # PLAYER CONTROL
 current_song = None
 
@@ -341,11 +357,11 @@ def menu_user():
                     print("Sudah di akhir playlist.")
             else:
                 # mode library (rekomendasi)
-                similar = find_similar_song(current_song, library)
-                if similar:
-                    play_song(similar)
+                node = find_library_node(current_song, library)
+                if node and node.next:
+                    play_song(node.next)
                 else:
-                    print("Tidak ada lagu serupa.")
+                    print("Sudah di akhir library.")
 
         # 5. PREV Lagu
         elif pilih == "5":
@@ -362,6 +378,7 @@ def menu_user():
             else:
                 print("Tidak ada fitur prev untuk lagu serupa.")
 
+                
         # 6. KELOLA PLAYLIST
         elif pilih == "6":
             while True:
@@ -370,7 +387,11 @@ def menu_user():
 1. Tambah Lagu
 2. Hapus Lagu
 3. Lihat Playlist
-4. Kembali
+4. Play lagu
+5. Stop Lagu
+6. Next
+7. Prev
+8. Kembali
                 """)
                 p = input("Pilih: ")
 
@@ -395,14 +416,50 @@ def menu_user():
                     playlist.show()
 
                 elif p == "4":
+                    j = input("Judul lagu di playlist: ").lower()
+                    node = find_playlist_node(j, playlist)
+                    if node:
+                        play_song(node, node)
+                    else:
+                        print("Lagu tidak ada di playlist.")
+
+                elif p == "5":
+                    if current_playlist_node:
+                        stop_song()
+                        current_playlist_node = None
+                        current_song = None
+                    else:
+                        print("Tidak ada lagu playlist yang sedang diputar.")
+
+                elif p == "6":
+                    if not current_playlist_node:
+                        print("Belum memutar lagu dari playlist.")
+                    elif current_playlist_node.next:
+                        current_playlist_node = current_playlist_node.next
+                        play_song(current_playlist_node, current_playlist_node)
+                    else:
+                        print("Sudah di akhir playlist.")
+
+                elif p == "7":
+                    if not current_playlist_node:
+                        print("Belum memutar lagu dari playlist.")
+                    elif current_playlist_node.prev:
+                        current_playlist_node = current_playlist_node.prev
+                        play_song(current_playlist_node, current_playlist_node)
+                    else:
+                        print("Sudah di awal playlist.")
+
+                elif p == "8":
                     break
                 else:
                     print("Pilihan tidak dikenal.")
 
         elif pilih == "7":
-            break
+            break   # <<< INI YANG HILANG
+
         else:
             print("Pilihan tidak dikenal.")
+
 
 # MENU ADMIN 
 def menu_admin():
